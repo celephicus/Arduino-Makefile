@@ -1259,7 +1259,7 @@ else
     endif
 endif
 
-LDFLAGS       += -$(MCU_FLAG_NAME)=$(MCU) -Wl,--gc-sections -O$(OPTIMIZATION_LEVEL)
+LDFLAGS       += -$(MCU_FLAG_NAME)=$(MCU) -Wl,--gc-sections -O$(OPTIMIZATION_LEVEL) -g
 SIZEFLAGS     ?= --mcu=$(MCU) -C
 
 # for backwards compatibility, grab ARDUINO_PORT if the user has it set
