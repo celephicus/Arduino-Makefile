@@ -1049,6 +1049,11 @@ TARGET_EEP = $(OBJDIR)/$(TARGET).eep
 TARGET_BIN = $(OBJDIR)/$(TARGET).bin
 CORE_LIB   = $(OBJDIR)/libcore.a
 
+## Elf with eeprom stripped out.
+TARGET_ELF_NO_EEPROM = $(OBJDIR)/$(TARGET).noeep.elf
+$(TARGET_ELF_NO_EEPROM): $(TARGET_ELF)
+	$(OBJCOPY) -R .eeprom $< $@
+
 # Names of executables
 # In the rare case of wanting to override a path and/or excecutable
 # name, the OVERRIDE_EXECUTABLES variable must be defned and _all_
@@ -1673,7 +1678,7 @@ endif
 ########################################################################
 # Explicit targets start here
 
-all: 		$(TARGET_EEP) $(TARGET_BIN) $(TARGET_HEX)
+all: 		$(TARGET_EEP) $(TARGET_BIN) $(TARGET_HEX) $(TARGET_ELF_NO_EEPROM)
 
 # Rule to create $(OBJDIR) automatically. All rules with recipes that
 # create a file within it, but do not already depend on a file within it
@@ -1826,7 +1831,7 @@ else ifeq ($(notdir $(MONITOR_CMD)), picocom)
 else ifeq ($(notdir $(MONITOR_CMD)), cu)
 		$(MONITOR_CMD) -l $(call get_monitor_port) -s $(MONITOR_BAUDRATE)
 else
-		$(MONITOR_CMD) $(call get_monitor_port) $(MONITOR_BAUDRATE)
+		$(MONITOR_CMD) $(MONITOR_BAUDRATE) $(call get_monitor_port) 
 endif
 
 debug_init:
